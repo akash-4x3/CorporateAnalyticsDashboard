@@ -2,16 +2,16 @@ import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 function DashboardLayout({ children }) {
   return (
-    <div className="min-h-screen flex bg-slate-100">
+    <div className="min-h-screen flex flex-col bg-slate-100">
 
-      {/* Sidebar */}
-      <Sidebar />
+      {/* Navbar */}
+      <Navbar />
 
-      {/* Main Section */}
-      <div className="flex-1 flex flex-col">
+      {/* Body Section */}
+      <div className="flex flex-1">
 
-        {/* Navbar */}
-        <Navbar />
+        {/* Sidebar */}
+        <Sidebar />
 
         {/* Content */}
         <main className="flex-1 p-6">

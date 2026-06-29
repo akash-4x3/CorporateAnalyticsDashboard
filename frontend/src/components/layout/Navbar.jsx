@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaSignOutAlt } from "react-icons/fa";
+import { FaChartPie, FaSignOutAlt } from "react-icons/fa";
 import toast from "react-hot-toast";
 import ProfileModal from "./ProfileModal";
 import { clearAuthStorage, getLoggedInUser } from "../../utils/authUtils";
@@ -21,9 +21,18 @@ function Navbar() {
 
   return (
     <>
-    <header className="h-16 bg-white shadow-md flex justify-end px-6">
+    <header className="h-16 bg-white shadow-md flex items-center justify-between px-6">
 
       {/* Left */}
+      <div className="flex items-center gap-3">
+
+        <div>
+          <h1 className="text-xl font-bold text-slate-800">
+            Corporate Analytics Dashboard
+          </h1>
+        </div>
+
+      </div>
 
       {/* Right */}
       <div className="flex items-center gap-6">

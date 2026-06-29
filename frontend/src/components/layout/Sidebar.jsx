@@ -37,13 +37,6 @@ function Sidebar() {
     <>
     <aside className="w-64 bg-slate-900 text-white flex flex-col">
 
-      {/* Logo */}
-      <div className="h-16 w-full flex items-center justify-center border-b border-slate-700">
-        <h1 className="text-lg font-bold text-white">
-          Corporate Analytics Dashboard
-        </h1>
-      </div>
-
       {/* Menu */}
       <nav className="flex-1 px-4 py-6">
 
@@ -52,6 +45,7 @@ function Sidebar() {
           <li className="flex items-center gap-3 hover:bg-slate-800 rounded-lg px-4 py-3 cursor-pointer transition">
             <NavLink
                 to="/dashboard"
+                end
                 className={({ isActive }) =>
                     `flex items-center gap-3 px-4 py-3 rounded-xl transition ${
                         isActive
