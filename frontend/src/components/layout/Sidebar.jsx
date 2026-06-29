@@ -5,6 +5,7 @@ import {
   FaUserShield,
   FaChartLine,
 } from "react-icons/fa";
+import { NavLink } from "react-router-dom";
 
 function Sidebar() {
   return (
@@ -24,14 +25,36 @@ function Sidebar() {
 
         <ul className="space-y-2">
 
-          <li className="flex items-center gap-3 bg-blue-600 rounded-lg px-4 py-3 cursor-pointer">
-            <FaChartPie />
-            Dashboard
+          <li className="flex items-center gap-3 hover:bg-slate-800 rounded-lg px-4 py-3 cursor-pointer transition">
+            <NavLink
+                to="/dashboard"
+                className={({ isActive }) =>
+                    `flex items-center gap-3 px-4 py-3 rounded-xl transition ${
+                        isActive
+                            ? "bg-blue-600 text-white"
+                            : "text-white hover:bg-slate-800"
+                    }`
+                }
+            >
+                <FaChartPie />
+                <span>Dashboard</span>
+            </NavLink>
           </li>
 
           <li className="flex items-center gap-3 hover:bg-slate-800 rounded-lg px-4 py-3 cursor-pointer transition">
-            <FaUsers />
-            Users
+            <NavLink
+                to="/dashboard/users"
+                className={({ isActive }) =>
+                    `flex items-center gap-3 px-4 py-3 rounded-xl transition ${
+                        isActive
+                            ? "bg-blue-600 text-white"
+                            : "text-white hover:bg-slate-800"
+                    }`
+                }
+            >
+                <FaUsers />
+                <span>Users</span>
+            </NavLink>
           </li>
 
           <li className="flex items-center gap-3 hover:bg-slate-800 rounded-lg px-4 py-3 cursor-pointer transition">

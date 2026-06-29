@@ -15,8 +15,6 @@ import com.corporate.analytics.dto.request.CreatePerformanceMetricRequest;
 import java.util.List;
 import com.corporate.analytics.dto.request.UpdatePerformanceMetricRequest;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/api/performance-metrics")

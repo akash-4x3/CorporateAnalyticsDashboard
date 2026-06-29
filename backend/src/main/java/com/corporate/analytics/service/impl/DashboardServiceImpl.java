@@ -8,7 +8,6 @@ import com.corporate.analytics.repository.UserRepository;
 import com.corporate.analytics.service.DashboardService;
 import org.springframework.stereotype.Service;
 import com.corporate.analytics.dto.response.TopPerformerDTO;
-import com.corporate.analytics.entity.PerformanceMetric;
 import org.springframework.data.domain.PageRequest;
 import java.util.List;
 import com.corporate.analytics.dto.response.SalesSummaryDTO;
@@ -16,7 +15,6 @@ import com.corporate.analytics.dto.response.LowPerformerDTO;
 import java.math.BigDecimal;
 import com.corporate.analytics.dto.response.PerformanceTrendDTO;
 import com.corporate.analytics.dto.response.DepartmentPerformanceDTO;
-import java.math.BigDecimal;
 
 @Service
 public class DashboardServiceImpl implements DashboardService {

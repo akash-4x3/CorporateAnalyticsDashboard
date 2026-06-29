@@ -1,7 +1,5 @@
 package com.corporate.analytics.controller;
 
-import com.corporate.analytics.entity.Department;
-import com.corporate.analytics.exception.ResourceNotFoundException;
 import com.corporate.analytics.payload.ApiResponse;
 import com.corporate.analytics.service.DepartmentService;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +19,13 @@ public class DepartmentController {
     }
 
     @GetMapping
-    public List<Department> getAllDepartments() {
-        return departmentService.getAllDepartments();
+    public ApiResponse<List<DepartmentResponseDTO>> getAllDepartments() {
+
+        return new ApiResponse<>(
+                true,
+                "Departments fetched successfully",
+                departmentService.getAllDepartments()
+        );
     }
     @GetMapping("/{id}")
     public ApiResponse<DepartmentResponseDTO> getDepartmentById(@PathVariable Integer id) {
