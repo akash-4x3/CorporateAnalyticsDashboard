@@ -38,12 +38,10 @@ function Sidebar() {
     <aside className="w-64 bg-slate-900 text-white flex flex-col">
 
       {/* Logo */}
-      <div className="h-16 flex items-center justify-center border-b border-slate-700">
-
-        <h1 className="text-xl font-bold text-blue-400">
-          Corporate Analytics
+      <div className="h-16 w-full flex items-center justify-center border-b border-slate-700">
+        <h1 className="text-lg font-bold text-white">
+          Corporate Analytics Dashboard
         </h1>
-
       </div>
 
       {/* Menu */}

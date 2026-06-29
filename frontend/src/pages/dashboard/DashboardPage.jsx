@@ -31,7 +31,11 @@ function DashboardPage() {
         setPerformers(performersResponse.data);
 
         const trendResponse = await getPerformanceTrend();
-        setPerformanceTrend(trendResponse.data);
+        setPerformanceTrend(
+            Array.isArray(trendResponse.data)
+                ? trendResponse.data
+                : []
+        );
 
         const lowPerformersResponse = await getLowPerformers();
         setLowPerformers(lowPerformersResponse.data);

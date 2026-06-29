@@ -5,15 +5,12 @@ import {
   FaBolt,
   FaBuilding,
   FaChartLine,
-  FaDatabase,
   FaEnvelope,
   FaGithub,
   FaInstagram,
   FaLinkedin,
   FaLock,
-  FaServer,
   FaShieldAlt,
-  FaTasks,
   FaUsers
 } from "react-icons/fa";
 import toast from "react-hot-toast";
