@@ -8,11 +8,13 @@ import PerformanceTrendChart from "../../components/dashboard/PerformanceTrendCh
 import { getPerformanceTrend } from "../../services/dashboardService";
 import LowPerformers from "../../components/dashboard/LowPerformers";
 import { getLowPerformers } from "../../services/dashboardService";
+import { getLoggedInUser } from "../../utils/authUtils";
 function DashboardPage() {
     const [performers, setPerformers] = useState([]);
     const [lowPerformers, setLowPerformers] = useState([]);
     const [summary, setSummary] = useState(null);
     const [performanceTrend, setPerformanceTrend] = useState([]);
+    const { fullName, role } = getLoggedInUser();
 
 
     useEffect(() => {
@@ -55,11 +57,11 @@ function DashboardPage() {
 
             <div>
                 <h1 className="text-3xl font-bold text-slate-800">
-                    Dashboard Overview
+                    Welcome back, {fullName}!
                 </h1>
 
                 <p className="text-slate-500 mt-1">
-                    Welcome to the Corporate Analytics Dashboard.
+                    Role: {role}
                 </p>
             </div>
 

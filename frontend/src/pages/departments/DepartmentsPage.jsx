@@ -1,46 +1,38 @@
 import DashboardLayout from "../../components/layout/DashboardLayout";
-import { 
-  getAllUsers, 
-  createUser,
-  updateUser,
-  deleteUser
-} from "../../services/userService";
+import {
+  getAllDepartments,
+  createDepartment,
+  updateDepartment,
+  deleteDepartment
+} from "../../services/departmentService";
 import { useEffect, useState } from "react";
-import { getAllRoles } from "../../services/roleService";
-import { getAllDepartments } from "../../services/departmentService";
 import LoadingSpinner from "../../components/common/LoadingSpinner";
-import { FaUsers } from "react-icons/fa";
+import { FaBuilding } from "react-icons/fa";
 import toast from "react-hot-toast";
 
-function UsersPage() {
+function DepartmentsPage() {
 
-  const [users, setUsers] = useState([]);
+  const [departments, setDepartments] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [showModal, setShowModal] = useState(false);
-  const [newUser, setNewUser] = useState({
-      fullName: "",
-      email: "",
-      password: "",
-      roleId: "",
-      departmentId: ""
+  const [newDepartment, setNewDepartment] = useState({
+      departmentName: ""
   });
-  const [roles, setRoles] = useState([]);
-  const [departments, setDepartments] = useState([]);
-  const [editingUser, setEditingUser] = useState(null);
+  const [editingDepartment, setEditingDepartment] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [deletingUserId, setDeletingUserId] = useState(null);
+  const [deletingDepartmentId, setDeletingDepartmentId] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedDepartment, setSelectedDepartment] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const usersPerPage = 5;
+  const departmentsPerPage = 5;
 
-  const fetchUsers = async () => {
+  const fetchDepartments = async () => {
     setLoading(true);
     try {
-       const response = await getAllUsers();
-        setUsers(response.data);
+       const response = await getAllDepartments();
+        setDepartments(response.data);
         } catch (error) {
           console.error(error);
         } finally {
@@ -48,65 +40,26 @@ function UsersPage() {
         }
   };
 
-  const fetchRoles = async () => {
-
-      try {
-
-          const response = await getAllRoles();
-          console.log("Roles Response:", response);
-          setRoles(response.data);
-
-      } catch (error) {
-
-          console.error(error);
-
-      }
-
-  };
-
-  const fetchDepartments = async () => {
-
-      try {
-
-          const response = await getAllDepartments();
-          console.log("Departments Response:", response);
-          setDepartments(response.data);
-
-      } catch (error) {
-
-          console.error(error);
-
-      }
-
-  };
-
   useEffect(() => {
-      fetchUsers();
-      fetchRoles();
       fetchDepartments();
 
   }, []);
 
-  const filteredUsers = users.filter((user) => {
+  const filteredDepartments = departments.filter((department) => {
 
       const keyword = searchTerm.toLowerCase();
 
-      return (
-          user.fullName.toLowerCase().includes(keyword) ||
-          user.email.toLowerCase().includes(keyword) ||
-          user.role.toLowerCase().includes(keyword) ||
-          user.department.toLowerCase().includes(keyword)
-      );
+      return department.departmentName.toLowerCase().includes(keyword);
 
   });
 
-  const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
+  const totalPages = Math.ceil(filteredDepartments.length / departmentsPerPage);
 
-  const startIndex = (currentPage - 1) * usersPerPage;
+  const startIndex = (currentPage - 1) * departmentsPerPage;
 
-  const paginatedUsers = filteredUsers.slice(
+  const paginatedDepartments = filteredDepartments.slice(
       startIndex,
-      startIndex + usersPerPage
+      startIndex + departmentsPerPage
   );
 
   useEffect(() => {
@@ -121,37 +74,27 @@ function UsersPage() {
 
   }, [currentPage, totalPages]);
 
-  const handleCreateUser = async () => {
+  const handleCreateDepartment = async () => {
 
-      if (
-          !newUser.fullName ||
-          !newUser.email ||
-          !newUser.password ||
-          !newUser.roleId ||
-          !newUser.departmentId
-      ) {
-          alert("Please fill all fields.");
+      if (!newDepartment.departmentName) {
+          toast.error("Please fill all fields.");
           return;
       }
 
       try {
           setSaving(true);
 
-          const response = await createUser(newUser);
+          await createDepartment(newDepartment);
 
-          toast.success(response.message);
+          toast.success("Department created successfully");
 
-          setNewUser({
-              fullName: "",
-              email: "",
-              password: "",
-              roleId: "",
-              departmentId: ""
+          setNewDepartment({
+              departmentName: ""
           });
 
           setShowModal(false);
 
-          fetchUsers();
+          fetchDepartments();
 
       } catch (error) {
 
@@ -159,7 +102,7 @@ function UsersPage() {
 
           toast.error(
               error.response?.data?.message ||
-              "Failed to create user."
+              "Failed to create department."
           );
 
       } finally {
@@ -168,31 +111,27 @@ function UsersPage() {
 
   };
 
-  const handleUpdateUser = async () => {
+  const handleUpdateDepartment = async () => {
 
       try {
           setSaving(true);
 
-          const response = await updateUser(
-              editingUser.userId,
-              newUser
+          await updateDepartment(
+              editingDepartment.departmentId,
+              newDepartment
           );
 
-          toast.success(response.message);
+          toast.success("Department updated successfully");
 
           setShowModal(false);
 
-          setEditingUser(null);
+          setEditingDepartment(null);
 
-          setNewUser({
-              fullName: "",
-              email: "",
-              password: "",
-              roleId: "",
-              departmentId: ""
+          setNewDepartment({
+              departmentName: ""
           });
 
-          fetchUsers();
+          fetchDepartments();
 
       } catch (error) {
 
@@ -200,7 +139,7 @@ function UsersPage() {
 
           toast.error(
               error.response?.data?.message ||
-              "Failed to update user."
+              "Failed to update department."
           );
 
       } finally {
@@ -209,55 +148,43 @@ function UsersPage() {
 
   };
 
-  const handleDeleteUser = async () => {
+  const handleDeleteDepartment = async () => {
 
         try {
 
-            setDeletingUserId(selectedUser.userId);
+            setDeletingDepartmentId(selectedDepartment.departmentId);
 
-            const response = await deleteUser(selectedUser.userId);
+            await deleteDepartment(selectedDepartment.departmentId);
 
-            toast.success(response.message);
+            toast.success("Department deleted successfully");
 
-            fetchUsers();
+            fetchDepartments();
 
             setShowDeleteModal(false);
 
-            setSelectedUser(null);
+            setSelectedDepartment(null);
 
         } catch (error) {
 
             toast.error(
                 error.response?.data?.message ||
-                "Failed to delete user."
+                "Failed to delete department."
             );
 
         } finally {
 
-            setDeletingUserId(null);
+            setDeletingDepartmentId(null);
 
         }
 
     };
 
-  const handleEdit = (user) => {
+  const handleEdit = (department) => {
 
-      const selectedRole = roles.find(
-          role => role.roleName === user.role
-      );
+      setEditingDepartment(department);
 
-      const selectedDepartment = departments.find(
-          department => department.departmentName === user.department
-      );
-
-      setEditingUser(user);
-
-      setNewUser({
-          fullName: user.fullName,
-          email: user.email,
-          password: "",
-          roleId: selectedRole ? selectedRole.roleId : "",
-          departmentId: selectedDepartment ? selectedDepartment.departmentId : ""
+      setNewDepartment({
+          departmentName: department.departmentName
       });
 
       setShowModal(true);
@@ -281,11 +208,11 @@ function UsersPage() {
         <div>
 
           <h1 className="text-4xl font-bold text-slate-800">
-            User Management
+            Department Management
           </h1>
 
           <p className="text-slate-500 mt-2">
-            Manage employees across the organization.
+            Manage company departments.
           </p>
 
         </div>
@@ -299,26 +226,22 @@ function UsersPage() {
         <button
             onClick={() => {
 
-              setEditingUser(null);
+              setEditingDepartment(null);
 
-              setNewUser({
-                  fullName: "",
-                  email: "",
-                  password: "",
-                  roleId: "",
-                  departmentId: ""
+              setNewDepartment({
+                  departmentName: ""
               });
 
               setShowModal(true);
           }}
             className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition"
         >
-            + Add User
+            + Add Department
         </button>
 
         <input
             type="text"
-            placeholder="Search users..."
+            placeholder="Search departments..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="border border-slate-300 rounded-xl px-4 py-3 w-full md:w-80 outline-none focus:ring-2 focus:ring-blue-500"
@@ -326,7 +249,7 @@ function UsersPage() {
 
       </div>
 
-      {/* Users Table */}
+      {/* Departments Table */}
 
       <div className="mt-8 bg-white rounded-2xl shadow-lg overflow-hidden">
 
@@ -336,13 +259,7 @@ function UsersPage() {
 
             <tr className="text-left">
 
-              <th className="px-6 py-4">Name</th>
-
-              <th className="px-6 py-4">Email</th>
-
-              <th className="px-6 py-4">Role</th>
-
-              <th className="px-6 py-4">Department</th>
+              <th className="px-6 py-4">Department Name</th>
 
               <th className="px-6 py-4">Actions</th>
 
@@ -353,32 +270,32 @@ function UsersPage() {
           <tbody>
 
           {
-              filteredUsers.length === 0 ? (
+              filteredDepartments.length === 0 ? (
 
                   <tr>
 
-                    <td colSpan="5" className="py-16">
+                    <td colSpan="2" className="py-16">
 
                         <div className="flex flex-col items-center">
 
                             <div className="text-6xl">
                                 <div className="bg-slate-100 rounded-full p-6">
-                                    <FaUsers className="text-5xl text-slate-400" />
+                                    <FaBuilding className="text-5xl text-slate-400" />
                                 </div>
                             </div>
 
                             <h2 className="mt-4 text-2xl font-semibold text-slate-700">
-                                No Users Found
+                                No Departments Found
                             </h2>
 
                             <p className="mt-2 text-slate-500">
-                                There are no users to display.
+                                There are no departments to display.
                             </p>
 
                             <p className="text-slate-500">
                                 Click
                                 <span className="font-semibold text-blue-600">
-                                    {" "}+ Add User{" "}
+                                    {" "}+ Add Department{" "}
                                 </span>
                                 to create one.
                             </p>
@@ -391,33 +308,21 @@ function UsersPage() {
 
               ) : (
 
-                  paginatedUsers.map((user) => (
+                  paginatedDepartments.map((department) => (
 
                       <tr
-                          key={user.userId}
+                          key={department.departmentId}
                           className="border-t hover:bg-slate-50 transition"
                       >
 
                           <td className="px-6 py-4">
-                              {user.fullName}
-                          </td>
-
-                          <td className="px-6 py-4">
-                              {user.email}
-                          </td>
-
-                          <td className="px-6 py-4">
-                              {user.role}
-                          </td>
-
-                          <td className="px-6 py-4">
-                              {user.department}
+                              {department.departmentName}
                           </td>
 
                           <td className="px-6 py-4">
 
                               <button
-                                  onClick={() => handleEdit(user)}
+                                  onClick={() => handleEdit(department)}
                                   className="text-blue-600 hover:underline mr-4"
                               >
                                   Edit
@@ -426,20 +331,20 @@ function UsersPage() {
                               <button
                                   onClick={() => {
 
-                                      setSelectedUser(user);
+                                      setSelectedDepartment(department);
 
                                       setShowDeleteModal(true);
 
                                   }}
-                                  disabled={deletingUserId === user.userId}
+                                  disabled={deletingDepartmentId === department.departmentId}
                                   className={`hover:underline ${
-                                      deletingUserId === user.userId
+                                      deletingDepartmentId === department.departmentId
                                           ? "text-red-300 cursor-not-allowed"
                                           : "text-red-600"
                                   }`}
                               >
                                   {
-                                      deletingUserId === user.userId
+                                      deletingDepartmentId === department.departmentId
                                           ? "Deleting..."
                                           : "Delete"
                                   }
@@ -461,7 +366,7 @@ function UsersPage() {
       </div>
 
       {
-          filteredUsers.length > 0 && (
+          filteredDepartments.length > 0 && (
 
               <div className="mt-6 flex flex-col md:flex-row items-center justify-between gap-4">
 
@@ -494,7 +399,6 @@ function UsersPage() {
           )
       }
 
-
       {
       showModal && (
 
@@ -503,14 +407,14 @@ function UsersPage() {
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-xl p-8">
 
               <h2 className="text-2xl font-bold text-slate-800">
-                  {editingUser ? "Edit User" : "Add New User"}
+                  {editingDepartment ? "Edit Department" : "Add New Department"}
               </h2>
 
               <p className="text-slate-500 mt-2">
                   {
-                      editingUser
-                          ? "Update employee information."
-                          : "Create a new employee account."
+                      editingDepartment
+                          ? "Update department information."
+                          : "Create a new company department."
                   }
               </p>
 
@@ -518,95 +422,16 @@ function UsersPage() {
 
                   <input
                       type="text"
-                      value={newUser.fullName}
+                      value={newDepartment.departmentName}
                       onChange={(e) =>
-                          setNewUser({
-                              ...newUser,
-                              fullName: e.target.value
+                          setNewDepartment({
+                              ...newDepartment,
+                              departmentName: e.target.value
                           })
                       }
-                      placeholder="Full Name"
+                      placeholder="Department Name"
                       className="w-full border rounded-xl px-4 py-3"
                   />
-
-                  <input
-                      type="email"
-                      value={newUser.email}
-                      onChange={(e) =>
-                          setNewUser({
-                              ...newUser,
-                              email: e.target.value
-                          })
-                      }
-                      placeholder="Email"
-                      className="w-full border rounded-xl px-4 py-3"
-                  />
-
-                  <input
-                      type="password"
-                      value={newUser.password}
-                      onChange={(e) =>
-                          setNewUser({
-                              ...newUser,
-                              password: e.target.value
-                          })
-                      }
-                      placeholder="Password"
-                      className="w-full border rounded-xl px-4 py-3"
-                  />
-
-                  <select
-                      value={newUser.roleId}
-                      onChange={(e) =>
-                          setNewUser({
-                              ...newUser,
-                              roleId: e.target.value
-                          })
-                      }
-                      className="w-full border rounded-xl px-4 py-3"
-                  >
-                      <option>Select Role</option>
-
-                      {
-                          roles.map((role) => (
-
-                              <option
-                                  key={role.roleId}
-                                  value={role.roleId}
-                              >
-                                  {role.roleName}
-                              </option>
-
-                          ))
-                      }
-                  </select>
-
-                  <select
-                      value={newUser.departmentId}
-                      onChange={(e) =>
-                          setNewUser({
-                              ...newUser,
-                              departmentId: Number(e.target.value)
-                          })
-                      }
-                      className="w-full border rounded-xl px-4 py-3"
-                  >
-                      <option>Select Department</option>
-
-                      {
-                          departments.map((department) => (
-
-                              <option
-                                  key={department.departmentId}
-                                  value={department.departmentId}
-                              >
-                                  {department.departmentName}
-                              </option>
-
-                          ))
-                      }
-
-                  </select>
 
               </div>
 
@@ -616,7 +441,7 @@ function UsersPage() {
                       onClick={() => {
                         setShowModal(false);
 
-                        setEditingUser(null);
+                        setEditingDepartment(null);
 
                       }}
                       className="px-6 py-3 rounded-xl border"
@@ -626,7 +451,7 @@ function UsersPage() {
 
                   <button
                       disabled={saving}
-                      onClick={editingUser ? handleUpdateUser : handleCreateUser}
+                      onClick={editingDepartment ? handleUpdateDepartment : handleCreateDepartment}
                       className={`px-6 py-3 rounded-xl text-white transition ${
                           saving
                               ? "bg-blue-400 cursor-not-allowed"
@@ -635,8 +460,8 @@ function UsersPage() {
                   >
                       {
                           saving
-                              ? (editingUser ? "Updating..." : "Saving...")
-                              : (editingUser ? "Update User" : "Save User")
+                              ? (editingDepartment ? "Updating..." : "Saving...")
+                              : (editingDepartment ? "Update Department" : "Save Department")
                       }
                   </button>
               </div>
@@ -661,7 +486,7 @@ function UsersPage() {
                     </div>
 
                     <h2 className="mt-4 text-2xl font-bold text-slate-800">
-                        Delete User
+                        Delete Department
                     </h2>
 
                     <p className="mt-4 text-slate-500">
@@ -670,7 +495,7 @@ function UsersPage() {
 
                         <span className="font-semibold text-slate-800">
                             {" "}
-                            {selectedUser?.fullName}
+                            {selectedDepartment?.departmentName}
                         </span>
 
                         ?
@@ -690,7 +515,7 @@ function UsersPage() {
 
                             setShowDeleteModal(false);
 
-                            setSelectedUser(null);
+                            setSelectedDepartment(null);
 
                         }}
                         className="px-6 py-3 rounded-xl border border-slate-300 hover:bg-slate-100 transition"
@@ -699,14 +524,14 @@ function UsersPage() {
                     </button>
 
                     <button
-                        onClick={handleDeleteUser}
-                        disabled={deletingUserId !== null}
+                        onClick={handleDeleteDepartment}
+                        disabled={deletingDepartmentId !== null}
                         className="bg-red-600 hover:bg-red-700 disabled:bg-red-300 text-white px-6 py-3 rounded-xl transition"
                     >
                         {
-                            deletingUserId
+                            deletingDepartmentId
                                 ? "Deleting..."
-                                : "Delete User"
+                                : "Delete Department"
                         }
                     </button>
 
@@ -722,4 +547,4 @@ function UsersPage() {
   );
 }
 
-export default UsersPage;
+export default DepartmentsPage;

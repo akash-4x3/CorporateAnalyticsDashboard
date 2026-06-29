@@ -6,3 +6,33 @@ export const getAllRoles = async () => {
 
     return response.data;
 };
+
+export const createRole = async (roleData) => {
+
+    const response = await api.post(
+        "/roles",
+        roleData
+    );
+
+    return response.data;
+
+};
+
+export const updateRole = async (roleId, roleData) => {
+
+    const response = await api.put(
+        `/roles/${roleId}`,
+        roleData
+    );
+
+    return response.data;
+
+};
+
+export const deleteRole = async (roleId) => {
+
+    const response = await api.delete(`/roles/${roleId}`);
+
+    return response.data;
+
+};
