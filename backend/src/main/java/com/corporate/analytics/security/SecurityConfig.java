@@ -30,7 +30,7 @@ public class SecurityConfig {
 
         configuration.setAllowedOrigins(List.of(
         "http://localhost:5173",
-        "https://corporate-analytics-dashboard.vercel.app/"
+        "https://corporate-analytics-dashboard.vercel.app"
         ));
 
         configuration.setAllowedMethods(List.of(
